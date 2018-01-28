@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+User: {{user}}
+Balance: {{balance}}
+
+<a href="{% url 'transfer' %}">Send money</a>
+  <h2>Recent transactions</h2>
+
+  <ul>
+  {% for tx in transfers %}
+    <li>{{ tx.timestamp|timesince }} ago:
+      {% if tx.profile_to.id == current_profile.id %}
+        FROM {{ tx.profile_from }}
+      {% else %}
+        TO {{ tx.profile_to }}
+      {% endif %}
+      ({{ tx.amount }})</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

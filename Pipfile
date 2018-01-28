@@ -12,3 +12,5 @@ name = "pypi"
 [packages]
 
 django = "*"
+django-debug-toolbar = "*"
+django-extensions = "*"
