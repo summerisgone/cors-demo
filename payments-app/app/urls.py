@@ -14,17 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf import settings
 from django.urls import path, include
+from rest_framework import routers
+from wallet import api
+
+router = routers.DefaultRouter()
+router.register(r'wallet', api.WalletViewSet, base_name='wallet')
+router.register(r'transfer', api.TransferViewSet, base_name='transfer')
 
 urlpatterns = [
-    path('', include('userprofile.urls')),
+    path('', include('wallet.urls')),
+    path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path(r'__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns

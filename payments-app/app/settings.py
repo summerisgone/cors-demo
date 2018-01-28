@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
     # APPS
-    'userprofile',
+    'wallet',
 
     # DEBUG
-    # 'debug_toolbar',
-    # 'django_extensions',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -54,17 +54,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # DEBUG
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
-ROOT_URLCONF = 'wallet.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'wallet', 'templates'),
+            os.path.join(BASE_DIR, 'app', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'wallet.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database

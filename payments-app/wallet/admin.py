@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Profile, Transfer
+from .models import Wallet, Transfer
 
 
-admin.site.register(Profile)
+admin.site.register(Wallet)
 
 
 class TransferAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
-    list_display = ['timestamp', 'profile_to', 'profile_from', 'amount']
+    list_display = ['timestamp', 'wallet_to', 'wallet_from', 'amount']
 
 admin.site.register(Transfer, TransferAdmin)

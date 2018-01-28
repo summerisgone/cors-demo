@@ -5,20 +5,20 @@ from django.shortcuts import render
 from .forms import TransferForm
 from django.urls import reverse
 
-from .models import Profile, Transfer
+from .models import Wallet, Transfer
 
 @login_required
 def balance(request):
-    current_profile = request.user.profile.get()
-    profile = Profile.objects.get(user_id=request.user.pk)
+    current_wallet = request.user.wallet.get()
+    profile = Wallet.objects.get(user_id=request.user.pk)
     transfers = Transfer.objects.filter(
-        Q(profile_from=current_profile) | Q(profile_to=current_profile)
+        Q(wallet_from=current_wallet) | Q(wallet_to=current_wallet)
     ).order_by('-timestamp')[:10]
-    return render(request, 'balance.html', {
+    return render(request, 'wallet/balance.html', {
         'user': request.user,
         'balance': profile.balance,
         'transfers': transfers,
-        'current_profile': current_profile
+        'current_wallet': current_wallet
     })
 
 @login_required
@@ -29,14 +29,14 @@ def send_money(request):
         if form.is_valid():
             transfer = Transfer(
                 amount=form.cleaned_data['amount'],
-                profile_to=Profile.objects.get(user__username=form.cleaned_data['to']),
-                profile_from=Profile.objects.get(user__id=request.user.pk)
+                wallet_to=Wallet.objects.get(user__username=form.cleaned_data['to']),
+                wallet_from=Wallet.objects.get(user__id=request.user.pk)
             )
             transfer.full_clean()
             transfer.save()
             return HttpResponseRedirect(reverse('balance'))
     else:
         form = TransferForm()
-    return render(request, 'transfer.html', {
+    return render(request, 'wallet/transfer.html', {
         'form': form
     })

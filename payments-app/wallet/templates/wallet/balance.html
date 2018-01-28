@@ -11,10 +11,10 @@ Balance: {{balance}}
   <ul>
   {% for tx in transfers %}
     <li>{{ tx.timestamp|timesince }} ago:
-      {% if tx.profile_to.id == current_profile.id %}
-        FROM {{ tx.profile_from }}
+      {% if tx.walletto.id == current_profile.id %}
+        FROM {{ tx.walletfrom }}
       {% else %}
-        TO {{ tx.profile_to }}
+        TO {{ tx.walletto }}
       {% endif %}
       ({{ tx.amount }})</li>
   {% endfor %}
