@@ -20,11 +20,14 @@ from wallet import api
 
 router = routers.DefaultRouter()
 router.register(r'wallet', api.WalletViewSet, base_name='wallet')
-router.register(r'transfer', api.TransferViewSet, base_name='transfer')
+router.register(r'transfer', api.TransferModelViewSet, base_name='transfer')
+router.register(r'tx', api.tx, base_name='tx')
+
 
 urlpatterns = [
     path('', include('wallet.urls')),
     path('api/', include(router.urls)),
+    path('api/tx', api.tx),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]

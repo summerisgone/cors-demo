@@ -8,7 +8,11 @@ class WalletSerializer(serializers.ModelSerializer):
         fields = ('balance', 'user')
 
 
-class TransferSerializer(serializers.HyperlinkedModelSerializer):
+class TransferModelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transfer
         fields = '__all__'
+
+class TransferSerializer(serializers.Serializer):
+    user_to = serializers.CharField(required=True, allow_blank=False, max_length=100)
+    amount = serializers.DecimalField(required=True, decimal_places=2, max_digits=19)
