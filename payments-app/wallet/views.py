@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import TransferForm
 from django.urls import reverse
 

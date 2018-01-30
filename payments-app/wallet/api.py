@@ -1,14 +1,15 @@
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.decorators import list_route, api_view, authentication_classes
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from .serializers import WalletSerializer, TransferSerializer, TransferModelSerializer
 from .models import Wallet, Transfer
+from .serializers import WalletSerializer, TransferSerializer, TransferModelSerializer
 
 
 class WalletViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,7 +34,10 @@ class TransferModelViewSet(viewsets.ReadOnlyModelViewSet):
         ).order_by('-timestamp')
 
 
+
+@permission_classes((IsAuthenticated,))
 @api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
 def tx(request):
     serializer = TransferSerializer(data=request.data)
     if serializer.is_valid():
@@ -53,3 +57,11 @@ def tx(request):
     else:
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
+
+
+@authentication_classes((SessionAuthentication,))
+@permission_classes((IsAuthenticated,))
+@api_view(['POST'])
+def token(request):
+    auth_token = Token.objects.create(user=request.user)
+    return Response(dict(token=auth_token.key))

@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('wallet.urls')),
     path('api/', include(router.urls)),
     path('api/tx', api.tx),
+    path('api/token', api.token),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -11,6 +11,7 @@ name = "pypi"
 
 [packages]
 
-Django = "*"
+django = "*"
 django-extensions = "*"
 djangorestframework = "*"
+django-cors-headers = "*"
