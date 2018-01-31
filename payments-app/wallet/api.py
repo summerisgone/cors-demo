@@ -63,5 +63,7 @@ def tx(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def token(request):
-    auth_token = Token.objects.create(user=request.user)
+    auth_token = Token.objects.get(user=request.user)
+    if not auth_token:
+        auth_token = Token.objects.create(user=request.user)
     return Response(dict(token=auth_token.key))

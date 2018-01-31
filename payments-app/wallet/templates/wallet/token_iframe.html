@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script>
+  let token = null;
+  const csrf = Cookies.get('csrftoken');
+  fetch('http://localhost:8000/api/token', {
+    method:'POST',
+    mode: 'cors',
+    credentials: 'include',
+    headers: new Headers({'X-CSRFToken': csrf})
+  })
+    .then(response => response.json())
+    .then(data => {
+      token = data.token;
+    })
+
+  function receiveMessage(event)
+  {
+    if (event.data === 'getToken') {
+      console.log('opener asking for token');
+      // Assuming you've verified the origin of the received message (which
+      // you must do in any case), a convenient idiom for replying to a
+      // message is to call postMessage on event.source and provide
+      // event.origin as the targetOrigin.
+      if (token) {
+        console.log('sending token to opener');
+        event.source.postMessage(`token:${token}`, event.origin);
+      }
+    }
+  }
+
+  window.addEventListener('message', receiveMessage, false);
+</script>
+{% endblock %}

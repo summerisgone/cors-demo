@@ -19,4 +19,9 @@ Balance: {{balance}}
       ({{ tx.amount }})</li>
   {% endfor %}
   </ul>
+  <script>
+    if (window.opener) {
+      window.opener.postMessage('close', '*');
+    }
+  </script>
 {% endblock %}
