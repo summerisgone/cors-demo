@@ -6,8 +6,8 @@
   let token = null;
   const csrf = Cookies.get('csrftoken');
   fetch('http://localhost:8000/api/token', {
-    method:'POST',
-    mode: 'cors',
+    method: 'POST',
+    mode: 'sameorigin',
     credentials: 'include',
     headers: new Headers({'X-CSRFToken': csrf})
   })

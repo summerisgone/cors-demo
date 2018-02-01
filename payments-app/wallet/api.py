@@ -13,7 +13,7 @@ from .serializers import WalletSerializer, TransferSerializer, TransferModelSeri
 
 
 class WalletViewSet(viewsets.ReadOnlyModelViewSet):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (TokenAuthentication, )
     serializer_class = WalletSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -21,23 +21,9 @@ class WalletViewSet(viewsets.ReadOnlyModelViewSet):
         user = self.request.user
         return Wallet.objects.filter(user=user)
 
-
-class TransferModelViewSet(viewsets.ReadOnlyModelViewSet):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,)
-    serializer_class = TransferModelSerializer
-
-    def get_queryset(self):
-        current_wallet = self.request.user.wallet.get()
-        return Transfer.objects.filter(
-            Q(wallet_from=current_wallet) | Q(wallet_to=current_wallet)
-        ).order_by('-timestamp')
-
-
-
-@permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def tx(request):
     serializer = TransferSerializer(data=request.data)
     if serializer.is_valid():
@@ -45,7 +31,9 @@ def tx(request):
             return Response({'errors': [
                 {'wallet_to': 'Can not transfer to yourself'}
             ]}, status=status.HTTP_400_BAD_REQUEST)
-
+        print(serializer.data)
+        print(request.user.pk)
+        print(Wallet.objects.get(user__username=serializer.data['user_to']))
         transfer = Transfer(
             amount=serializer.data['amount'],
             wallet_to=Wallet.objects.get(user__username=serializer.data['user_to']),

@@ -20,7 +20,6 @@ from wallet import api
 
 router = routers.DefaultRouter()
 router.register(r'wallet', api.WalletViewSet, base_name='wallet')
-router.register(r'transfer', api.TransferModelViewSet, base_name='transfer')
 router.register(r'tx', api.tx, base_name='tx')
 
 

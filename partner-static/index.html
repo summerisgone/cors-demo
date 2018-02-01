@@ -68,8 +68,31 @@
           document.body.appendChild(button);
         });
       })
-      .then(() => {
-        getToken('http://localhost:8000/token')
+      .then(() => (getToken('http://localhost:8000/token')))
+      .then(token => {
+        return fetch('http://localhost:8000/api/tx', {
+          method: 'POST',
+          mode: 'cors',
+          credentials: 'include',
+          headers: new Headers({
+            'Authorization': `Token ${token.split(':')[1]}`,
+            'Content-Type': 'application/json'
+          }),
+          body: JSON.stringify({user_to: 'user1', amount: 1})
+        })
+        .then(() => (token));
+      })
+      .then(token => {
+        return fetch('http://localhost:8000/api/wallet', {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'include',
+          headers: new Headers({
+            'Authorization': `Token ${token.split(':')[1]}`
+          })
+        }).then(response => (response.json())).then(data => {
+          console.log('balance: ', data[0].balance);
+        });
       })
         
     </script>
