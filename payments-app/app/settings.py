@@ -144,8 +144,8 @@ REST_FRAMEWORK = {
 
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost:8000',
-    '127.0.0.1:9000'
+    'localhost:8000'
+    'http://127.0.0.1:9000'
 )
 CORS_URLS_REGEX = r'^/api/.*$'
 CORS_ALLOW_METHODS = (

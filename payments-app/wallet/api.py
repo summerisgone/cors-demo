@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework import viewsets
@@ -51,7 +52,10 @@ def tx(request):
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])
 def token(request):
-    auth_token = Token.objects.get(user=request.user)
-    if not auth_token:
-        auth_token = Token.objects.create(user=request.user)
-    return Response(dict(token=auth_token.key))
+    if request.GET['origin'] in settings.CORS_ORIGIN_WHITELIST:
+        auth_token = Token.objects.get(user=request.user)
+        if not auth_token:
+            auth_token = Token.objects.create(user=request.user)
+        return Response(dict(token=auth_token.key))
+    else:
+        return Response(dict(error='origin not supported'), status=status.HTTP_400_BAD_REQUEST)
