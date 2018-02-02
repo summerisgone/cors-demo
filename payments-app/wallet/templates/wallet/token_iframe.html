@@ -13,9 +13,8 @@
       // you must do in any case), a convenient idiom for replying to a
       // message is to call postMessage on event.source and provide
       // event.origin as the targetOrigin.
-      fetch('http://localhost:8000/api/token?origin=' + event.origin, {
+      fetch('/api/token?origin=' + event.origin, {
         method: 'POST',
-        mode: 'sameorigin',
         credentials: 'include',
         headers: new Headers({'X-CSRFToken': csrf})
       })

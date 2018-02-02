@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.clickjacking import xframe_options_exempt
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -48,6 +49,7 @@ def tx(request):
                         status=status.HTTP_400_BAD_REQUEST)
 
 
+@xframe_options_exempt
 @authentication_classes((SessionAuthentication,))
 @permission_classes((IsAuthenticated,))
 @api_view(['POST'])

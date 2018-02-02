@@ -144,8 +144,7 @@ REST_FRAMEWORK = {
 
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost:8000'
-    'http://127.0.0.1:9000'
+    'http://shop.summerisgone.com'
 )
 CORS_URLS_REGEX = r'^/api/.*$'
 CORS_ALLOW_METHODS = (
