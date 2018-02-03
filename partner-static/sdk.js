@@ -46,7 +46,7 @@
   }
 
   function openAuth(resolve, reject) {
-    var authWindow = window.open(LOGIN_URL, "hello", "width=200,height=200,left=500,top=300");
+    var authWindow = window.open(LOGIN_URL, "hello", "width=800,height=600,left=500,top=300");
     function receiveMessage(event) {
       if ((event.origin === PAYMENT_ORIGIN) &&
         (event.data === 'close')) {
