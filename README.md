@@ -6,3 +6,7 @@
 ## Update shop
 
     aws s3 sync partner-static s3://shop.summerisgone.com
+
+## Live demo
+
+[Shop](http://shop.summerisgone.com/) and [payments](https://payments.summerisgone.com/)
