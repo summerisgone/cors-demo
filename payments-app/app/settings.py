@@ -155,5 +155,5 @@ CORS_ALLOW_METHODS = (
 CORS_ALLOW_HEADERS = default_headers
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = (
-    '127.0.0.1',
+    'shop.summerisgone.com',
 )
