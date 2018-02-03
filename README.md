@@ -9,4 +9,4 @@
 
 ## Live demo
 
-[Shop](http://shop.summerisgone.com/) and [payments](https://payments.summerisgone.com/)
+[Shop](https://shop.summerisgone.com/) and [payments](https://payments.summerisgone.com/)

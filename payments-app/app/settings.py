@@ -144,7 +144,7 @@ REST_FRAMEWORK = {
 
 
 CORS_ORIGIN_WHITELIST = (
-    'http://shop.summerisgone.com'
+    'https://shop.summerisgone.com'
 )
 CORS_URLS_REGEX = r'^/api/.*$'
 CORS_ALLOW_METHODS = (
