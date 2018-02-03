@@ -17,7 +17,7 @@
         <tbody>
           {% for tx in transfers %}
             <tr>
-              <td>{% if tx.wallet_to.id == current_profile.id %}
+              <td>{% if tx.wallet_to.id == current_wallet.id %}
                   FROM {{ tx.wallet_from }}
                 {% else %}
                   TO {{ tx.wallet_to }}
