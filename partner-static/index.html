@@ -1,100 +1,76 @@
 <html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  </head>
   <body>
-    <h1>Partner site</h1>
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">SHOP</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <h1>This is Shop site</h1>
+
+      <a href="#" class="btn btn-primary" onclick="pay()">Pay!</a>
+
+      Balance is <span id="balance">loading</span>
+      
+    </div>
+    <script src="http://shop.summerisgone.com.s3-website.eu-central-1.amazonaws.com/sdk.js"></script>
     <script>
-      function getToken(url) {
-        return new Promise((resolve, reject) => {
-          var iframe = document.createElement('iframe');
-          var retry = 0;
-          var tokenReady = false;
-          iframe.src = url;
-          iframe.width = 0;
-          iframe.height = 0;
-          iframe.style.opacity = 0;
-          document.body.appendChild(iframe);
-          iframe.onload = () => {
-            function _getToken() {
-              if (tokenReady) return;
-              iframe.contentWindow.postMessage('getToken', 'https://payments.summerisgone.com');
-              retry++;
-              if (retry < 3) {
-                setTimeout(_getToken, 500);
-              } else {
-                console.error('unauthorised');
-                reject('unauthorised');
-              }
-            }
-            _getToken();
-          }
-  
-          function receiveMessage(event)
-          {
-            if (event.data.startsWith && event.data.startsWith('token')) {
-              console.log('token is', event.data);
-              resolve(event.data);
-              tokenReady = true;
-            }
-          }
-        
-          window.addEventListener('message', receiveMessage, false);
-        });
-      }
-
-      function openAuth(resolve, reject) {
-        var authWindow = window.open("https://payments.summerisgone.com/accounts/login/", "hello", "width=200,height=200,left=500,top=300");
-        function receiveMessage(event) {
-          if ((event.origin === 'https://payments.summerisgone.com') &&
-            (event.data === 'close')) {
-              authWindow.close();
-              resolve();
-            }
-        }
-        window.addEventListener('message', receiveMessage, false);
-        // close popup after 10s
-        setTimeout(() => {
-          reject('unauthorized')
-        }, 10000);
-      }
-
-      getToken('https://payments.summerisgone.com/token')
-      .then(token => console.log('token:', token))
-      .catch(error => {
-        return new Promise((resolve, reject) => {
-          var button = document.createElement('button');
-          button.textContent = 'log in';
-          button.onclick = () => {
-            openAuth(resolve, reject)
-          };
-          document.body.appendChild(button);
-        });
-      })
-      .then(() => (getToken('https://payments.summerisgone.com/token')))
-      .then(token => {
-        return fetch('https://payments.summerisgone.com/api/tx', {
-          method: 'POST',
-          mode: 'cors',
-          credentials: 'include',
-          headers: new Headers({
-            'Authorization': `Token ${token.split(':')[1]}`,
-            'Content-Type': 'application/json'
-          }),
-          body: JSON.stringify({user_to: 'user1', amount: 1})
+     var TOKEN, REQUIRE_AUTH = true;
+      function _payAndShowBalance(token) {
+        return SDK.sendMoney(token, {
+          user_to: 'user1',
+          amount: 1
         })
-        .then(() => (token));
-      })
-      .then(token => {
-        return fetch('https://payments.summerisgone.com/api/wallet', {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'include',
-          headers: new Headers({
-            'Authorization': `Token ${token.split(':')[1]}`
-          })
-        }).then(response => (response.json())).then(data => {
-          console.log('balance: ', data[0].balance);
+        .then(() => {
+          SDK.getBalance(token).then(wallets => {
+            document.getElementById('balance').textContent = wallets[0].balance;
+          });
         });
-      })
-        
+      }
+
+      var pay = function() {
+        if (REQUIRE_AUTH) {
+          SDK.openAuth(() => {
+            REQUIRE_AUTH = false;
+            SDK.getToken().then(token => (_payAndShowBalance(token)));
+          });
+        } else {
+          if (TOKEN) {
+            _payAndShowBalance(TOKEN)
+          } else {
+            SDK.getToken().then(token => (_payAndShowBalance(token)));
+          }
+        }
+      };
+      
+      SDK.getToken()
+        .then(token => {
+          REQUIRE_AUTH = false;
+          TOKEN = token;
+          return token;
+        })
+        .then(t => {
+          SDK.getBalance(t).then(wallets => {
+            document.getElementById('balance').textContent = wallets[0].balance;
+          });
+        });
     </script>
+    
   </body>
 </html>

@@ -2,7 +2,9 @@
 
 {% block main %}
 
+<div class="col-sm-6 col-sm-offset-3 text-center">
   <h1>Logged out!</h1>
-  <a href="{% url 'login' %}">Log in again</a>
+  <a class="btn btn-primary" href="{% url 'login' %}">Log in again</a>
+</div>
 
 {% endblock %}
