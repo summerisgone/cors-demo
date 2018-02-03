@@ -1,7 +1,8 @@
 ## Update payments
 
     docker build . -t cors-demo
-    docker run -d -p8001:8000 cors-demo
+    docker kill cors-demo && docker rm cors-demo
+    docker run -d -p8001:8000 --name cors-demo cors-demo
 
 ## Update shop
 
