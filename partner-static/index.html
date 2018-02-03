@@ -34,7 +34,7 @@
      var TOKEN, REQUIRE_AUTH = true;
       function _payAndShowBalance(token) {
         return SDK.sendMoney(token, {
-          user_to: 'user1',
+          user_to: 'admin',
           amount: 1
         })
         .then(() => {
@@ -69,6 +69,9 @@
           SDK.getBalance(t).then(wallets => {
             document.getElementById('balance').textContent = wallets[0].balance;
           });
+        })
+        .catch(() => {
+          document.getElementById('balance').textContent = 'unavailable';
         });
     </script>
     

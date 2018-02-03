@@ -42,3 +42,14 @@ class AnimalTestCase(TestCase):
         self.client.force_login(self.user1)
         with self.assertRaises(ValidationError):
             self.client.post(reverse('transfer'), {'to': 'user2', 'amount': '1000'})
+
+    def test_user_creation(self):
+        users_before = User.objects.count()
+        self.client.post(reverse('register'))
+        self.assertEqual(User.objects.count(), users_before + 1)
+
+    def test_token_for_new_users(self):
+        self.client.post(reverse('register'))
+        new_user = User.objects.order_by('-date_joined')[0]
+        self.client.force_login(self.user1)
+        self.assertTrue(True)

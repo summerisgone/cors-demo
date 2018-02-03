@@ -33,9 +33,6 @@ def tx(request):
             return Response({'errors': [
                 {'wallet_to': 'Can not transfer to yourself'}
             ]}, status=status.HTTP_400_BAD_REQUEST)
-        print(serializer.data)
-        print(request.user.pk)
-        print(Wallet.objects.get(user__username=serializer.data['user_to']))
         transfer = Transfer(
             amount=serializer.data['amount'],
             wallet_to=Wallet.objects.get(user__username=serializer.data['user_to']),
@@ -55,8 +52,9 @@ def tx(request):
 @api_view(['POST'])
 def token(request):
     if request.GET['origin'] in settings.CORS_ORIGIN_WHITELIST:
-        auth_token = Token.objects.get(user=request.user)
-        if not auth_token:
+        try:
+            auth_token = Token.objects.get(user=request.user)
+        except Token.DoesNotExist:
             auth_token = Token.objects.create(user=request.user)
         return Response(dict(token=auth_token.key))
     else:
