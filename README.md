@@ -10,4 +10,4 @@
 
 ## Live demo
 
-[Shop](https://shop.summerisgone.com/) and [payments](https://payments.summerisgone.com/)
+[Example partner shop](https://shop.summerisgone.com/) and [Example payment system site](https://payments.summerisgone.com/)
